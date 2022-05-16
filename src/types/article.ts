@@ -1,7 +1,7 @@
 import { ResponseError, ResponseStatus } from './API'
 import { Profile } from './profile'
 
-export interface Article {
+export interface IArticle {
   id: string
   slug: string
   title: string
@@ -16,7 +16,7 @@ export interface Article {
 }
 
 export interface MultipleArticles {
-  articles: Array<Article>
+  articles: Array<IArticle>
   articlesCount: number
 }
 

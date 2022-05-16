@@ -1,6 +1,7 @@
 import { EntityId } from '@reduxjs/toolkit'
 import { formatDistanceToNow, parseISO } from 'date-fns'
 import * as React from 'react'
+import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { TagVariant } from '../../types/tag'
 import TagList from '../tags/TagList'
@@ -22,7 +23,7 @@ const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <a href="profile.html">
+        <a href={author.username}>
           <img src={author.image} alt={author.username} />
         </a>
         <div className="info">
@@ -35,12 +36,12 @@ const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
           <i className="ion-heart"></i> {article.favoritesCount}
         </button>
       </div>
-      <a href={article.slug} className="preview-link">
+      <Link to={`article/${article.id}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
         <TagList tags={article.tagList} variant={TagVariant.article} />
-      </a>
+      </Link>
     </div>
   )
 }

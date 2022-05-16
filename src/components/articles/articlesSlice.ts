@@ -5,7 +5,7 @@ import {
   nanoid,
 } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { Article, ArticlesState, MultipleArticles } from '../../types/article'
+import { IArticle, ArticlesState, MultipleArticles } from '../../types/article'
 import { ResponseStatus } from '../../types/API'
 import { getArticles } from '../../services/conduit'
 
@@ -20,7 +20,8 @@ export const fetchArticles = createAsyncThunk(
   },
 )
 
-const articlesAdapter = createEntityAdapter<Article>({
+// TODO: Add sorting
+const articlesAdapter = createEntityAdapter<IArticle>({
   selectId: state => state.id,
 })
 

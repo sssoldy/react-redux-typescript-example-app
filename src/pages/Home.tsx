@@ -1,6 +1,6 @@
 import * as React from 'react'
-import ArticleList from '../articles/ArticleList'
-import TagsPopular from '../tags/TagsPopular'
+import ArticleList from '../components/articles/ArticleList'
+import TagsPopular from '../components/tags/TagsPopular'
 
 const Home: React.FC = () => {
   return (
