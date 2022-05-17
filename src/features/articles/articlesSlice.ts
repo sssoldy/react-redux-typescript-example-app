@@ -2,27 +2,29 @@ import {
   createAsyncThunk,
   createEntityAdapter,
   createSlice,
-  nanoid,
 } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
 import { IArticle, ArticlesState, MultipleArticles } from '../../types/article'
 import { ResponseStatus } from '../../types/API'
 import { getArticles } from '../../services/conduit'
+import { FiltersState } from '../../types/filter'
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
-  async () => {
+  async (filters: FiltersState) => {
+    const { filter, value } = filters
     const response = await getArticles({
       limit: 20,
       offset: 0,
+      [filter]: value,
     })
     return response.data as MultipleArticles // {articles: Array(3), articlesCount: 3}
   },
 )
 
-// TODO: Add sorting
+// TODO: Add initial sorting
 const articlesAdapter = createEntityAdapter<IArticle>({
-  selectId: state => state.id,
+  selectId: state => state.slug,
 })
 
 const initialState = articlesAdapter.getInitialState<ArticlesState>({
@@ -40,14 +42,12 @@ const articlesSlice = createSlice({
       .addCase(fetchArticles.pending, state => {
         state.status = ResponseStatus.loading
       })
+      // FIXME: replace setAll for pagination feature
       .addCase(fetchArticles.fulfilled, (state, action) => {
         const { articles, articlesCount } = action.payload
-        // TODO: Not sure that I should generate IDs for ID-less articles
-        // Have to research this
-        articles.map(article => (article.id = nanoid()))
         state.articlesCount = articlesCount
         state.status = ResponseStatus.succeeded
-        articlesAdapter.upsertMany(state, articles)
+        articlesAdapter.setAll(state, articles)
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.status = ResponseStatus.failed
@@ -57,14 +57,14 @@ const articlesSlice = createSlice({
 })
 
 export const {
-  selectAll: SelectAllArticles,
-  selectById: SelectArticleById,
-  selectIds: SelectArticlesIds,
+  selectAll: selectAllArticles,
+  selectById: selectArticleById,
+  selectIds: selectArticlesIds,
 } = articlesAdapter.getSelectors((state: RootState) => state.articles)
 
-export const SelectArticlesError = (state: RootState) => state.articles.error
-export const SelectArticlesStatus = (state: RootState) => state.articles.status
-export const SelectArticlesCount = (state: RootState) =>
+export const selectArticlesError = (state: RootState) => state.articles.error
+export const selectArticlesStatus = (state: RootState) => state.articles.status
+export const selectArticlesCount = (state: RootState) =>
   state.articles.articlesCount
 
 export default articlesSlice.reducer

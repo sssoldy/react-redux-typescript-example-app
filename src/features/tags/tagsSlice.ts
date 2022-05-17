@@ -9,7 +9,7 @@ export const fetchTags = createAsyncThunk('tags/fetchTags', async () => {
 })
 
 const initialState: TagsState = {
-  tags: [],
+  entities: [],
   status: ResponseStatus.idle,
   error: null,
 }
@@ -25,7 +25,7 @@ const tagsSlice = createSlice({
       })
       .addCase(fetchTags.fulfilled, (state, action) => {
         state.status = ResponseStatus.succeeded
-        state.tags = action.payload
+        state.entities = action.payload
       })
       .addCase(fetchTags.rejected, (state, action) => {
         state.status = ResponseStatus.failed

@@ -1,24 +1,24 @@
 import { EntityId } from '@reduxjs/toolkit'
-import { formatDistanceToNow, parseISO } from 'date-fns'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { TagVariant } from '../../types/tag'
+import { formatDate } from '../../utils/misc'
 import TagList from '../tags/TagList'
-import { SelectArticleById } from './articlesSlice'
+import { selectArticleById } from '../../features/articles/articlesSlice'
 
 interface ArticleExcerptProps {
   articleId: EntityId
 }
 
 const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
-  const article = useAppSelector(state => SelectArticleById(state, articleId))
+  const article = useAppSelector(state => selectArticleById(state, articleId))
 
-  // TODO: Add undefined handler
-  if (!article) return null
+  // TODO: Add error handler
+  if (!article)
+    return <div className="article-preview">Something went wrong</div>
 
   const { author } = article
-  const createdAgo = formatDistanceToNow(parseISO(article.createdAt))
 
   return (
     <div className="article-preview">
@@ -30,13 +30,13 @@ const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
           <a href={author.username} className="author">
             {author.username}
           </a>
-          <span className="date">{createdAgo} ago</span>
+          <span className="date">{formatDate(article.createdAt)}</span>
         </div>
         <button className="btn btn-outline-primary btn-sm pull-xs-right">
           <i className="ion-heart"></i> {article.favoritesCount}
         </button>
       </div>
-      <Link to={`article/${article.id}`} className="preview-link">
+      <Link to={`article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>

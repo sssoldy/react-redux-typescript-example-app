@@ -1,5 +1,8 @@
 import * as React from 'react'
+import { useAppDispatch } from '../../app/hooks'
 import { TagVariant } from '../../types/tag'
+import { filterChanged } from '../../features/filters/filtersSlice'
+import { Filter } from '../../types/filter'
 
 interface TagProps {
   tag: string
@@ -7,28 +10,33 @@ interface TagProps {
 }
 
 const Tag: React.FC<TagProps> = ({ tag, variant }) => {
-  let content
+  const dispatch = useAppDispatch()
 
-  switch (variant) {
-    case TagVariant.article:
-      content = (
+  const onTagClicked = () => {
+    dispatch(filterChanged({ filter: Filter.byTag, value: tag }))
+  }
+
+  return (
+    <React.Fragment>
+      {variant === TagVariant.article && (
         <li className="tag-default tag-pill tag-outline ng-binding ng-scope">
           {tag}
         </li>
-      )
-      break
-    case TagVariant.popular:
-      content = (
+      )}
+
+      {variant === TagVariant.popular && (
         <li>
-          <a href={`#${tag}`} className="tag-pill tag-default">
+          <a
+            href={`#${tag}`}
+            className="tag-pill tag-default"
+            onClick={onTagClicked}
+          >
             {tag}
           </a>
         </li>
-      )
-      break
-  }
-
-  return <React.Fragment>{content}</React.Fragment>
+      )}
+    </React.Fragment>
+  )
 }
 
 export default Tag

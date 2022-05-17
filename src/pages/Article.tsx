@@ -1,17 +1,18 @@
 import * as React from 'react'
 import { useParams } from 'react-router-dom'
 import { useAppSelector } from '../app/hooks'
-import { SelectArticleById } from '../components/articles/articlesSlice'
+import { selectArticleById } from '../features/articles/articlesSlice'
 import TagList from '../components/tags/TagList'
 import { TagVariant } from '../types/tag'
+import { formatDate } from '../utils/misc'
 
 const Article: React.FC = () => {
   // TODO: research a better solution https://github.com/remix-run/react-router/issues/8200
   const { id } = useParams() as { id: string }
-  const article = useAppSelector(state => SelectArticleById(state, id))
+  const article = useAppSelector(state => selectArticleById(state, id))
 
   // TODO: Add undefined handler
-  if (!article) return null
+  if (!article) return <div className="article-page">Something went wrong</div>
 
   const { author } = article
 
@@ -29,7 +30,7 @@ const Article: React.FC = () => {
               <a href={author.username} className="author">
                 {author.username}
               </a>
-              <span className="date">{article.createdAt}</span>
+              <span className="date">{formatDate(article.createdAt)}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
               <i className="ion-plus-round"></i>
@@ -65,7 +66,7 @@ const Article: React.FC = () => {
               <a href="/" className="author">
                 {author.username}
               </a>
-              <span className="date">{article.createdAt}</span>
+              <span className="date">{formatDate(article.createdAt)}</span>
             </div>
             <button className="btn btn-sm btn-outline-secondary">
               <i className="ion-plus-round"></i>

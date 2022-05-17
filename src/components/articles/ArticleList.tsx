@@ -4,43 +4,39 @@ import { ResponseStatus } from '../../types/API'
 import ArticleExcerpt from './ArticleExcerpt'
 import {
   fetchArticles,
-  SelectArticlesError,
-  SelectArticlesIds,
-  SelectArticlesStatus,
-} from './articlesSlice'
+  selectArticlesError,
+  selectArticlesIds,
+  selectArticlesStatus,
+} from '../../features/articles/articlesSlice'
+import { selectFilters } from '../../features/filters/filtersSlice'
 
 const ArticlesList: React.FC = () => {
-  const articlesIds = useAppSelector(SelectArticlesIds)
-  const error = useAppSelector(SelectArticlesError)
-  const status = useAppSelector(SelectArticlesStatus)
+  const articlesIds = useAppSelector(selectArticlesIds)
+  // const articlesIds: Array<EntityId> = []
+  const error = useAppSelector(selectArticlesError)
+  const status = useAppSelector(selectArticlesStatus)
+  const filter = useAppSelector(selectFilters)
 
   const dispatch = useAppDispatch()
 
   React.useEffect(() => {
-    if (status === ResponseStatus.idle) {
-      dispatch(fetchArticles())
-    }
-  }, [dispatch, status])
+    dispatch(fetchArticles(filter))
+  }, [dispatch, filter])
 
-  let content
+  // TODO: Refactor it
+  if (status === ResponseStatus.loading)
+    return <div className="article-preview">Loading articles...</div>
+  if (status === ResponseStatus.failed)
+    return <div className="article-preview">Error: {error}</div>
+  if (articlesIds && articlesIds.length === 0)
+    return <div className="article-preview">Nothing found</div>
 
-  switch (status) {
-    case ResponseStatus.loading:
-      content = <div>Spinner</div>
-      break
-    case ResponseStatus.failed:
-      content = <div>failed: {error}</div>
-      break
-    case ResponseStatus.succeeded:
-      content = articlesIds.map(id => (
-        <ArticleExcerpt key={id} articleId={id} />
-      ))
-      break
-    default:
-      content = ''
-  }
-
-  return <React.Fragment>{content}</React.Fragment>
+  return (
+    <React.Fragment>
+      {articlesIds &&
+        articlesIds.map(id => <ArticleExcerpt key={id} articleId={id} />)}
+    </React.Fragment>
+  )
 }
 
 export default ArticlesList

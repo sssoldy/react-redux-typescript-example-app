@@ -3,13 +3,10 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { ResponseStatus } from '../../types/API'
 import { TagVariant } from '../../types/tag'
 import TagList from './TagList'
-import { fetchTags } from './tagsSlice'
+import { fetchTags } from '../../features/tags/tagsSlice'
 
 const TagsPopular: React.FC = () => {
-  // TODO: add selectors
-  const tags = useAppSelector(state => state.tags.tags)
-  const status = useAppSelector(state => state.tags.status)
-  const error = useAppSelector(state => state.tags.error)
+  const { entities: tags, status, error } = useAppSelector(state => state.tags)
 
   const dispatch = useAppDispatch()
 
@@ -19,26 +16,14 @@ const TagsPopular: React.FC = () => {
     }
   }, [dispatch, status])
 
-  let content
-
-  switch (status) {
-    case ResponseStatus.loading:
-      content = <div>Spinner</div>
-      break
-    case ResponseStatus.failed:
-      content = <div>failed: {error}</div>
-      break
-    case ResponseStatus.succeeded:
-      content = <TagList tags={tags} variant={TagVariant.popular} />
-      break
-    default:
-      content = ''
-  }
+  // TODO: Refactor it
+  if (status === ResponseStatus.loading) return <div>Loading tags...</div>
+  if (status === ResponseStatus.failed) return <div>Error: {error}</div>
+  if (tags.length === 0) return <div>Nothing found</div>
 
   return (
     <React.Fragment>
-      <p>Popular Tags</p>
-      {content}
+      <TagList tags={tags} variant={TagVariant.popular} />
     </React.Fragment>
   )
 }

@@ -6,7 +6,7 @@ export enum TagVariant {
 }
 
 export interface TagsState {
-  tags: Array<string>
+  entities: Array<string>
   status: ResponseStatus
   error: ResponseError
 }
