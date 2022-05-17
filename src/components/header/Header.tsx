@@ -5,17 +5,17 @@ const Header: React.FC = () => {
   return (
     <nav className="navbar navbar-light">
       <div className="container">
+        {/* TODO: add active class feature */}
         <Link className="navbar-brand" to="/">
           conduit
         </Link>
         <ul className="nav navbar-nav pull-xs-right">
           <li className="nav-item">
-            {/* TODO: Add "active" className when you're on that page */}
             <Link className="nav-link active" to="/">
               Home
             </Link>
           </li>
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link className="nav-link" to="/">
               <i className="ion-compose"></i>&nbsp;New Article
             </Link>
@@ -24,9 +24,9 @@ const Header: React.FC = () => {
             <Link className="nav-link" to="/">
               <i className="ion-gear-a"></i>&nbsp;Settings
             </Link>
-          </li>
+          </li> */}
           <li className="nav-item">
-            <Link className="nav-link" to="/">
+            <Link className="nav-link" to="/login">
               Sign in
             </Link>
           </li>
