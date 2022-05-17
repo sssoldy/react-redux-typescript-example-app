@@ -47,6 +47,7 @@ const articlesSlice = createSlice({
         const { articles, articlesCount } = action.payload
         state.articlesCount = articlesCount
         state.status = ResponseStatus.succeeded
+        state.error = null
         articlesAdapter.setAll(state, articles)
       })
       .addCase(fetchArticles.rejected, (state, action) => {

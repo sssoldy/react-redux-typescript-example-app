@@ -1,26 +1,27 @@
 import * as React from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import {
-  fetchLoginUser,
+  fetchRegisterUser,
   selectUserError,
   selectUserStatus,
 } from '../../features/user/userSlice'
 import { ResponseStatus } from '../../types/API'
-import { ILoginUser } from '../../types/user'
+import { IRegisterUser } from '../../types/user'
 
 // TODO: add validation
 // TODO: add error handler
-const LoginForm: React.FC = () => {
+const RegisterForm: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const status = useAppSelector(selectUserStatus)
   const error = useAppSelector(selectUserError)
 
-  const [formData, setFormData] = React.useState<ILoginUser>({
+  const [formData, setFormData] = React.useState<IRegisterUser>({
+    username: '',
     email: '',
     password: '',
   })
-  const { email, password } = formData
+  const { username, email, password } = formData
 
   const onInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -32,14 +33,14 @@ const LoginForm: React.FC = () => {
 
   const onFormSubmitted = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    dispatch(fetchLoginUser(formData))
+    dispatch(fetchRegisterUser(formData))
   }
 
   return (
     <div className="col-md-6 offset-md-3 col-xs-12">
-      <h1 className="text-xs-center">Sign in</h1>
+      <h1 className="text-xs-center">Sign up</h1>
       <p className="text-xs-center">
-        <a href="/">Need an account?</a>
+        <a href="/">Have an account?</a>
       </p>
       <ul className="error-messages">
         {status === ResponseStatus.succeeded && <li>succeeded</li>}
@@ -48,6 +49,16 @@ const LoginForm: React.FC = () => {
 
       <form onSubmit={e => onFormSubmitted(e)}>
         <fieldset disabled={status === ResponseStatus.loading}>
+          <fieldset className="form-group">
+            <input
+              className="form-control form-control-lg"
+              type="text"
+              name="username"
+              placeholder="Your Name"
+              value={username}
+              onChange={e => onInputChanged(e)}
+            />
+          </fieldset>
           <fieldset className="form-group">
             <input
               className="form-control form-control-lg"
@@ -69,7 +80,7 @@ const LoginForm: React.FC = () => {
             />
           </fieldset>
           <button className="btn btn-lg btn-primary pull-xs-right">
-            Sign in
+            Sign Up
           </button>
         </fieldset>
       </form>
@@ -77,4 +88,4 @@ const LoginForm: React.FC = () => {
   )
 }
 
-export default LoginForm
+export default RegisterForm

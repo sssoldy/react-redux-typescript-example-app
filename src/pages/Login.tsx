@@ -1,18 +1,17 @@
 import * as React from 'react'
+import { useLocation } from 'react-router-dom'
 import LoginForm from '../components/login/LoginForm'
+import RegisterForm from '../components/register/RegisterForm'
 
 const Login: React.FC = () => {
+  const { pathname } = useLocation()
+  const isLoginPage = pathname === '/login'
+
   return (
     <div className="auth-page">
       <div className="container page">
         <div className="row">
-          <div className="col-md-6 offset-md-3 col-xs-12">
-            <h1 className="text-xs-center">Sign in</h1>
-            <p className="text-xs-center">
-              <a href="/">Need an account?</a>
-            </p>
-            <LoginForm />
-          </div>
+          {isLoginPage ? <LoginForm /> : <RegisterForm />}
         </div>
       </div>
     </div>

@@ -25,6 +25,7 @@ const tagsSlice = createSlice({
       })
       .addCase(fetchTags.fulfilled, (state, action) => {
         state.status = ResponseStatus.succeeded
+        state.error = null
         state.entities = action.payload
       })
       .addCase(fetchTags.rejected, (state, action) => {

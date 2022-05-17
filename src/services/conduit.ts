@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { baseApiUrl } from '../config/settings'
-import { ILoginUser } from '../types/user'
+import { ILoginUser, IRegisterUser } from '../types/user'
 
 axios.defaults.baseURL = baseApiUrl
 
@@ -14,4 +14,8 @@ export const getTags = async (params = {}) => {
 
 export const userLogin = async (loginData: ILoginUser) => {
   return await axios.post('users/login', { user: loginData })
+}
+
+export const userRegister = async (registerData: IRegisterUser) => {
+  return await axios.post('users', { user: registerData })
 }
