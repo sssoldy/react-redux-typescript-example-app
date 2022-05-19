@@ -1,5 +1,5 @@
 import { ResponseError, ResponseStatus } from './API'
-import { Profile } from './profile'
+import { IProfile } from './profile'
 
 export interface IArticle {
   slug: string
@@ -11,10 +11,10 @@ export interface IArticle {
   updatedAt: string
   favorited: boolean
   favoritesCount: number
-  author: Profile
+  author: IProfile
 }
 
-export interface MultipleArticles {
+export interface IArticles {
   articles: Array<IArticle>
   articlesCount: number
 }

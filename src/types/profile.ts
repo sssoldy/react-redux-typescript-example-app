@@ -1,4 +1,4 @@
-export interface Profile {
+export interface IProfile {
   username: string
   bio: string
   image: string

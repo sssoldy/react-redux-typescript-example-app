@@ -8,6 +8,10 @@ export const getArticles = async (params = {}) => {
   return await axios.get('articles', { params })
 }
 
+export const getComments = async (slug: string) => {
+  return await axios.get(`/articles/${slug}/comments`)
+}
+
 export const getTags = async (params = {}) => {
   return await axios.get('tags', { params })
 }

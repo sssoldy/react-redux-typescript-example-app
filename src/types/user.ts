@@ -19,7 +19,7 @@ export interface IUser {
   image: string | null
 }
 
-export interface UserState {
+export interface IUserState {
   user: IUser
   status: ResponseStatus
   error: ResponseError

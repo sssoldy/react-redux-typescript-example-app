@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
 import { userLogin, userRegister } from '../../services/conduit'
 import { ResponseStatus } from '../../types/API'
-import { IUser, ILoginUser, UserState, IRegisterUser } from '../../types/user'
+import { IUser, ILoginUser, IUserState, IRegisterUser } from '../../types/user'
 
 export const fetchLoginUser = createAsyncThunk(
   'user/fetchLoginUser',
@@ -30,7 +30,7 @@ const user: IUser = {
   image: null,
 }
 
-const initialState: UserState = {
+const initialState: IUserState = {
   user,
   status: ResponseStatus.idle,
   error: null,

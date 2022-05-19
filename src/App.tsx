@@ -1,24 +1,18 @@
 import * as React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Footer from './components/footer/Footer'
-import Header from './components/header/Header'
-import { routes } from './router/router'
+import { Outlet } from 'react-router-dom'
+import Footer from './layouts/Footer'
+import Header from './layouts/Header'
+import Main from './layouts/Main'
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
+    <React.Fragment>
       <Header />
-      <Routes>
-        {routes.map(route => (
-          <Route
-            key={route.name}
-            path={route.path}
-            element={<route.Component />}
-          />
-        ))}
-      </Routes>
+      <Main>
+        <Outlet />
+      </Main>
       <Footer />
-    </BrowserRouter>
+    </React.Fragment>
   )
 }
 

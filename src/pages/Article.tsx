@@ -1,15 +1,17 @@
 import * as React from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAppSelector } from '../app/hooks'
 import { selectArticleById } from '../features/articles/articlesSlice'
 import TagList from '../components/tags/TagList'
+import CommentList from '../components/comment/CommentList'
 import { TagVariant } from '../types/tag'
 import { formatDate } from '../utils/misc'
 
+// FIXME: fix 'something went wrong' error if page was reloaded
 const Article: React.FC = () => {
   // TODO: research a better solution https://github.com/remix-run/react-router/issues/8200
-  const { id } = useParams() as { id: string }
-  const article = useAppSelector(state => selectArticleById(state, id))
+  const { slug } = useParams() as { slug: string }
+  const article = useAppSelector(state => selectArticleById(state, slug))
 
   // TODO: Add undefined handler
   if (!article) return <div className="article-page">Something went wrong</div>
@@ -23,25 +25,29 @@ const Article: React.FC = () => {
           <h1>{article.title}</h1>
 
           <div className="article-meta">
-            <a href={author.username}>
+            <Link to={`../profile/${author.username}`}>
               <img src={author.image} alt={author.username} />
-            </a>
+            </Link>
             <div className="info">
-              <a href={author.username} className="author">
+              <Link to={`../profile/${author.username}`} className="author">
                 {author.username}
-              </a>
+              </Link>
               <span className="date">{formatDate(article.createdAt)}</span>
             </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow {author.username}
-            </button>
+            <Link to="../register">
+              <button className="btn btn-sm btn-outline-secondary">
+                <i className="ion-plus-round"></i>
+                &nbsp; Follow {author.username}
+              </button>
+            </Link>
             &nbsp;&nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Article{' '}
-              <span className="counter">({article.favoritesCount})</span>
-            </button>
+            <Link to="../register">
+              <button className="btn btn-sm btn-outline-primary">
+                <i className="ion-heart"></i>
+                &nbsp; Favorite Article{' '}
+                <span className="counter">({article.favoritesCount})</span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -59,98 +65,40 @@ const Article: React.FC = () => {
 
         <div className="article-actions">
           <div className="article-meta">
-            <a href={author.username}>
+            <Link to={`../profile/${author.username}`}>
               <img src={author.image} alt={author.username} />
-            </a>
+            </Link>
             <div className="info">
-              <a href="/" className="author">
+              <Link to={`../profile/${author.username}`} className="author">
                 {author.username}
-              </a>
+              </Link>
               <span className="date">{formatDate(article.createdAt)}</span>
             </div>
-            <button className="btn btn-sm btn-outline-secondary">
-              <i className="ion-plus-round"></i>
-              &nbsp; Follow {author.username}
-            </button>
+            <Link to="../register">
+              <button className="btn btn-sm btn-outline-secondary">
+                <i className="ion-plus-round"></i>
+                &nbsp; Follow {author.username}
+              </button>
+            </Link>
             &nbsp;
-            <button className="btn btn-sm btn-outline-primary">
-              <i className="ion-heart"></i>
-              &nbsp; Favorite Article{' '}
-              <span className="counter">({article.favoritesCount})</span>
-            </button>
+            <Link to="../register">
+              <button className="btn btn-sm btn-outline-primary">
+                <i className="ion-heart"></i>
+                &nbsp; Favorite Article{' '}
+                <span className="counter">({article.favoritesCount})</span>
+              </button>
+            </Link>
           </div>
         </div>
 
         <div className="row">
           <div className="col-xs-12 col-md-8 offset-md-2">
-            {/* TODO: Auth */}
-            <form className="card comment-form">
-              <div className="card-block">
-                <textarea
-                  className="form-control"
-                  placeholder="Write a comment..."
-                  rows={3}
-                ></textarea>
-              </div>
-              <div className="card-footer">
-                <img
-                  alt="placeholder"
-                  src="http://i.imgur.com/Qr71crq.jpg"
-                  className="comment-author-img"
-                />
-                <button className="btn btn-sm btn-primary">Post Comment</button>
-              </div>
-            </form>
-
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a href="/" className="comment-author">
-                  <img
-                    alt="placeholder"
-                    src="http://i.imgur.com/Qr71crq.jpg"
-                    className="comment-author-img"
-                  />
-                </a>
-                &nbsp;
-                <a href="/" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="card-block">
-                <p className="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className="card-footer">
-                <a href="/" className="comment-author">
-                  <img
-                    alt="placeholder"
-                    src="http://i.imgur.com/Qr71crq.jpg"
-                    className="comment-author-img"
-                  />
-                </a>
-                &nbsp;
-                <a href="/" className="comment-author">
-                  Jacob Schmidt
-                </a>
-                <span className="date-posted">Dec 29th</span>
-                <span className="mod-options">
-                  <i className="ion-edit"></i>
-                  <i className="ion-trash-a"></i>
-                </span>
-              </div>
-            </div>
+            <p>
+              <Link to="../login">Sign in</Link> or{' '}
+              <Link to="../register">sign up</Link> to add comments on this
+              article.
+            </p>
+            <CommentList slug={slug} />
           </div>
         </div>
       </div>

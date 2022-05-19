@@ -1,29 +1,23 @@
 import * as React from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { ResponseStatus } from '../../types/API'
-import { TagVariant } from '../../types/tag'
+import { ITags, TagVariant } from '../../types/tag'
 import TagList from './TagList'
-import { fetchTags } from '../../features/tags/tagsSlice'
+import { useAsync } from '../../hooks/useAsync'
+import { getTags } from '../../services/conduit'
 
 const TagsPopular: React.FC = () => {
-  const { entities: tags, status, error } = useAppSelector(state => state.tags)
-
-  const dispatch = useAppDispatch()
-
+  const { data, error, run, isLoading, isError } = useAsync<ITags>()
   React.useEffect(() => {
-    if (status === ResponseStatus.idle) {
-      dispatch(fetchTags())
-    }
-  }, [dispatch, status])
+    run(getTags())
+  }, [run])
 
-  // TODO: Refactor it
-  if (status === ResponseStatus.loading) return <div>Loading tags...</div>
-  if (status === ResponseStatus.failed) return <div>Error: {error}</div>
-  if (tags.length === 0) return <div>Nothing found</div>
+  // // TODO: Refactor it
+  if (isLoading) return <div>Loading tags...</div>
+  if (isError) return <div>Error: {error}</div>
+  if (!data || !data.tags.length) return <div>Nothing found</div>
 
   return (
     <React.Fragment>
-      <TagList tags={tags} variant={TagVariant.popular} />
+      <TagList tags={data.tags} variant={TagVariant.popular} />
     </React.Fragment>
   )
 }

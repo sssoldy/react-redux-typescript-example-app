@@ -28,7 +28,7 @@ const ArticlesList: React.FC = () => {
     return <div className="article-preview">Loading articles...</div>
   if (status === ResponseStatus.failed)
     return <div className="article-preview">Error: {error}</div>
-  if (articlesIds && articlesIds.length === 0)
+  if (articlesIds.length === 0)
     return <div className="article-preview">Nothing found</div>
 
   return (

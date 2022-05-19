@@ -23,18 +23,20 @@ const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <a href={author.username}>
+        <Link to={`profile/${author.username}`}>
           <img src={author.image} alt={author.username} />
-        </a>
+        </Link>
         <div className="info">
-          <a href={author.username} className="author">
+          <Link to={`profile/${author.username}`} className="author">
             {author.username}
-          </a>
+          </Link>
           <span className="date">{formatDate(article.createdAt)}</span>
         </div>
-        <button className="btn btn-outline-primary btn-sm pull-xs-right">
-          <i className="ion-heart"></i> {article.favoritesCount}
-        </button>
+        <Link to="/register">
+          <button className="btn btn-outline-primary btn-sm pull-xs-right">
+            <i className="ion-heart"></i> {article.favoritesCount}
+          </button>
+        </Link>
       </div>
       <Link to={`article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>

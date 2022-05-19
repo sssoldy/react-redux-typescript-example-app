@@ -3,7 +3,7 @@ export enum Filter {
   byTag = 'tag',
 }
 
-export interface FiltersState {
+export interface IFiltersState {
   filter: Filter
   value: string | null
 }

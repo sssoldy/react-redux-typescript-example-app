@@ -4,21 +4,21 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { IArticle, ArticlesState, MultipleArticles } from '../../types/article'
+import { IArticle, ArticlesState, IArticles } from '../../types/article'
 import { ResponseStatus } from '../../types/API'
 import { getArticles } from '../../services/conduit'
-import { FiltersState } from '../../types/filter'
+import { IFiltersState } from '../../types/filter'
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticles',
-  async (filters: FiltersState) => {
+  async (filters: IFiltersState) => {
     const { filter, value } = filters
     const response = await getArticles({
       limit: 20,
       offset: 0,
       [filter]: value,
     })
-    return response.data as MultipleArticles // {articles: Array(3), articlesCount: 3}
+    return response.data as IArticles // {articles: Array(3), articlesCount: 3}
   },
 )
 
