@@ -9,12 +9,9 @@ interface CommentListProps {
 }
 
 const CommentList: React.FC<CommentListProps> = ({ slug }) => {
-  let { data, error, run, isLoading, isError } = useAsync<IComments>()
+  const { data, error, run, isLoading, isError } = useAsync<IComments>()
 
   React.useEffect(() => {
-    if (!slug) {
-      return
-    }
     run(getComments(slug))
   }, [run, slug])
 

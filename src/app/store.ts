@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import articlesReducer from '../features/articles/articlesSlice'
-import filtersReducer from '../features/filters/filtersSlice'
+import articleReducer from '../features/article/articleSlice'
+import profileReducer from '../features/profile/profileSlice'
 import userReducer from '../features/user/userSlice'
 
 export const store = configureStore({
   reducer: {
     articles: articlesReducer,
-    filters: filtersReducer,
+    article: articleReducer,
+    profile: profileReducer,
     user: userReducer,
   },
 })

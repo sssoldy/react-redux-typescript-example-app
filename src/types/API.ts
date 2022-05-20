@@ -1,7 +1,7 @@
 export enum ResponseStatus {
   idle = 'idle',
   loading = 'loading',
-  succeeded = 'succeeded',
+  successed = 'successed',
   failed = 'failed',
 }
 

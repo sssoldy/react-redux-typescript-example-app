@@ -47,7 +47,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchLoginUser.fulfilled, (state, action) => {
         state.user = action.payload
-        state.status = ResponseStatus.succeeded
+        state.status = ResponseStatus.successed
         state.error = null
       })
       .addCase(fetchLoginUser.rejected, (state, action) => {
@@ -60,7 +60,7 @@ const userSlice = createSlice({
       })
       .addCase(fetchRegisterUser.fulfilled, (state, action) => {
         state.user = action.payload
-        state.status = ResponseStatus.succeeded
+        state.status = ResponseStatus.successed
         state.error = null
       })
       .addCase(fetchRegisterUser.rejected, (state, action) => {

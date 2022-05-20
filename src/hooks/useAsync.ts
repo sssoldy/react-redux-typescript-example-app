@@ -27,7 +27,7 @@ function useAsync<T>(initialState?: InitialState<T>) {
   const { data, error, status } = state
 
   const setData = React.useCallback(
-    (data: T) => dispatch({ data, status: 'resolved', error: null }),
+    (data: T) => dispatch({ data, status: 'fulfilled', error: null }),
     [dispatch],
   )
   const setError = React.useCallback(
@@ -61,7 +61,7 @@ function useAsync<T>(initialState?: InitialState<T>) {
     isIdle: status === 'idle',
     isLoading: status === 'pending',
     isError: status === 'rejected',
-    isSuccess: status === 'resolved',
+    isSuccess: status === 'fulfilled',
 
     error,
     status,

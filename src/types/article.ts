@@ -1,4 +1,5 @@
 import { ResponseError, ResponseStatus } from './API'
+import { IArticleFilter } from './filter'
 import { IProfile } from './profile'
 
 export interface IArticle {
@@ -14,13 +15,20 @@ export interface IArticle {
   author: IProfile
 }
 
+export interface IArticleState {
+  article: IArticle | null
+  status: ResponseStatus
+  error: ResponseError
+}
+
 export interface IArticles {
   articles: Array<IArticle>
   articlesCount: number
 }
 
-export interface ArticlesState {
+export interface IArticlesState {
   articlesCount: number
   status: ResponseStatus
   error: ResponseError
+  filter: IArticleFilter
 }

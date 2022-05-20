@@ -17,7 +17,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
         <p className="card-text">{comment.body}</p>
       </div>
       <div className="card-footer">
-        <Link to={`../profile/${author.username}`} className="comment-author">
+        <Link to={`/profile/${author.username}`} className="comment-author">
           <img
             alt={author.username}
             src={author.image}
@@ -25,7 +25,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
           />
         </Link>
         &nbsp;
-        <Link to={`../profile/${author.username}`} className="comment-author">
+        <Link to={`/profile/${author.username}`} className="comment-author">
           {author.username}
         </Link>
         <span className="date-posted">{postedDate}</span>

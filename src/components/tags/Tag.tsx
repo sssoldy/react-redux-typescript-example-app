@@ -1,8 +1,5 @@
 import * as React from 'react'
-import { useAppDispatch } from '../../app/hooks'
 import { TagVariant } from '../../types/tag'
-import { filterChanged } from '../../features/filters/filtersSlice'
-import { Filter } from '../../types/filter'
 
 interface TagProps {
   tag: string
@@ -10,12 +7,6 @@ interface TagProps {
 }
 
 const Tag: React.FC<TagProps> = ({ tag, variant }) => {
-  const dispatch = useAppDispatch()
-
-  const onTagClicked = () => {
-    dispatch(filterChanged({ filter: Filter.byTag, value: tag }))
-  }
-
   return (
     <React.Fragment>
       {variant === TagVariant.article && (
@@ -26,11 +17,7 @@ const Tag: React.FC<TagProps> = ({ tag, variant }) => {
 
       {variant === TagVariant.popular && (
         <li>
-          <a
-            href={`#${tag}`}
-            className="tag-pill tag-default"
-            onClick={onTagClicked}
-          >
+          <a href={`#${tag}`} className="tag-pill tag-default">
             {tag}
           </a>
         </li>

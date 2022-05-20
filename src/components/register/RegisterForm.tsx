@@ -43,7 +43,7 @@ const RegisterForm: React.FC = () => {
         <a href="/">Have an account?</a>
       </p>
       <ul className="error-messages">
-        {status === ResponseStatus.succeeded && <li>succeeded</li>}
+        {status === ResponseStatus.successed && <li>succeeded</li>}
         {status === ResponseStatus.failed && <li>error: {error}</li>}
       </ul>
 

@@ -1,24 +1,26 @@
 import {
   createAsyncThunk,
   createEntityAdapter,
+  createSelector,
   createSlice,
+  PayloadAction,
 } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { IArticle, ArticlesState, IArticles } from '../../types/article'
+import { IArticle, IArticlesState, IArticles } from '../../types/article'
 import { ResponseStatus } from '../../types/API'
 import { getArticles } from '../../services/conduit'
-import { IFiltersState } from '../../types/filter'
+import { IArticleFilter } from '../../types/filter'
+import { baseFilter } from '../../config/settings'
+import { selectProfile } from '../profile/profileSlice'
 
 export const fetchArticles = createAsyncThunk(
-  'articles/fetchArticles',
-  async (filters: IFiltersState) => {
-    const { filter, value } = filters
+  'articles/fetchArticleList',
+  async (filter: IArticleFilter) => {
     const response = await getArticles({
-      limit: 20,
-      offset: 0,
-      [filter]: value,
+      ...baseFilter,
+      ...filter,
     })
-    return response.data as IArticles // {articles: Array(3), articlesCount: 3}
+    return response.data as IArticles
   },
 )
 
@@ -27,28 +29,34 @@ const articlesAdapter = createEntityAdapter<IArticle>({
   selectId: state => state.slug,
 })
 
-const initialState = articlesAdapter.getInitialState<ArticlesState>({
+const initialState = articlesAdapter.getInitialState<IArticlesState>({
   articlesCount: 0,
   status: ResponseStatus.idle,
   error: null,
+  filter: baseFilter,
 })
 
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
-  reducers: {},
+  reducers: {
+    filterUpdated: (state, action: PayloadAction<IArticleFilter>) => {
+      state.filter = action.payload
+    },
+  },
   extraReducers(builder) {
     builder
-      .addCase(fetchArticles.pending, state => {
+      .addCase(fetchArticles.pending, (state, action) => {
         state.status = ResponseStatus.loading
+        state.filter = action.meta.arg
       })
       // FIXME: replace setAll for pagination feature
       .addCase(fetchArticles.fulfilled, (state, action) => {
         const { articles, articlesCount } = action.payload
-        state.articlesCount = articlesCount
-        state.status = ResponseStatus.succeeded
-        state.error = null
         articlesAdapter.setAll(state, articles)
+        state.articlesCount = articlesCount
+        state.status = ResponseStatus.successed
+        state.error = null
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.status = ResponseStatus.failed
@@ -56,6 +64,8 @@ const articlesSlice = createSlice({
       })
   },
 })
+
+export const { filterUpdated } = articlesSlice.actions
 
 export const {
   selectAll: selectAllArticles,
@@ -65,7 +75,17 @@ export const {
 
 export const selectArticlesError = (state: RootState) => state.articles.error
 export const selectArticlesStatus = (state: RootState) => state.articles.status
+export const selectArticlesFilter = (state: RootState) => state.articles.filter
 export const selectArticlesCount = (state: RootState) =>
   state.articles.articlesCount
+// export const selectArticleByUsername = (state: RootState) => {
+//   const articles = selectAllArticles(state)
+// }
+
+export const selectArticleByUsername = createSelector(
+  [selectAllArticles, (_, username: string) => username],
+  (articles, username) =>
+    articles.find(article => article.author.username === username),
+)
 
 export default articlesSlice.reducer

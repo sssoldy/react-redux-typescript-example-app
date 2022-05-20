@@ -23,11 +23,11 @@ const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <Link to={`profile/${author.username}`}>
+        <Link to={`@${author.username}`}>
           <img src={author.image} alt={author.username} />
         </Link>
         <div className="info">
-          <Link to={`profile/${author.username}`} className="author">
+          <Link to={`@${author.username}`} className="author">
             {author.username}
           </Link>
           <span className="date">{formatDate(article.createdAt)}</span>
@@ -38,7 +38,7 @@ const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
           </button>
         </Link>
       </div>
-      <Link to={`article/${article.slug}`} className="preview-link">
+      <Link to={`/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>

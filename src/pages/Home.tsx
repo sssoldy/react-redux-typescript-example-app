@@ -1,9 +1,19 @@
 import * as React from 'react'
+import { useAppDispatch } from '../app/hooks'
 import ArticleList from '../components/articles/ArticleList'
-import FeedFilter from '../components/filter/FilterList'
+import FilterTab from '../components/filterTab/FilterTab'
 import TagsPopular from '../components/tags/TagsPopular'
+import { fetchArticles } from '../features/articles/articlesSlice'
+import { useRouteFilter } from '../hooks/useRouteFilter'
 
 const Home: React.FC = () => {
+  const filter = useRouteFilter()
+  const dispatch = useAppDispatch()
+
+  React.useEffect(() => {
+    dispatch(fetchArticles(filter))
+  }, [dispatch, filter])
+
   return (
     <div className="home-page">
       <div className="banner">
@@ -16,7 +26,9 @@ const Home: React.FC = () => {
       <div className="container page">
         <div className="row">
           <div className="col-md-9">
-            <FeedFilter />
+            <div className="feed-toggle">
+              <FilterTab />
+            </div>
             <ArticleList />
           </div>
           <div className="col-md-3">
