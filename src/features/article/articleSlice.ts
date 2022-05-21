@@ -16,7 +16,7 @@ export const fetchArticle = createAsyncThunk<
   if (article) return article
 
   const response = await getArticleBySlug(slug)
-  return response.data.article as IArticle
+  return response.data.article
 })
 
 const initialState: IArticleState = {

@@ -14,12 +14,11 @@ export const fetchProfile = createAsyncThunk<
   const article = selectArticleByUsername(state, username)
 
   if (article) {
-    console.log(article.author)
-    return article.author as IProfile
+    return article.author
   }
 
   const response = await getProfile(username)
-  return response.data.profile as IProfile
+  return response.data.profile
 })
 
 const initialState: IProfileState = {

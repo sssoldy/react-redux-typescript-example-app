@@ -45,11 +45,11 @@ const Article: React.FC = () => {
           <h1>{article.title}</h1>
 
           <div className="article-meta">
-            <Link to={`/profile/${author.username}`}>
+            <Link to={`/@${author.username}`}>
               <img src={author.image} alt={author.username} />
             </Link>
             <div className="info">
-              <Link to={`/profile/${author.username}`} className="author">
+              <Link to={`/@${author.username}`} className="author">
                 {author.username}
               </Link>
               <span className="date">{formatDate(article.createdAt)}</span>
@@ -85,11 +85,11 @@ const Article: React.FC = () => {
 
         <div className="article-actions">
           <div className="article-meta">
-            <Link to={`/profile/${author.username}`}>
+            <Link to={`/@${author.username}`}>
               <img src={author.image} alt={author.username} />
             </Link>
             <div className="info">
-              <Link to={`/profile/${author.username}`} className="author">
+              <Link to={`/@${author.username}`} className="author">
                 {author.username}
               </Link>
               <span className="date">{formatDate(article.createdAt)}</span>

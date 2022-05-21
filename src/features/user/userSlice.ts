@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
 import { userLogin, userRegister } from '../../services/conduit'
 import { ResponseStatus } from '../../types/API'
-import { IUser, ILoginUser, IUserState, IRegisterUser } from '../../types/user'
+import { ILoginUser, IUserState, IRegisterUser } from '../../types/user'
 
 export const fetchLoginUser = createAsyncThunk(
   'user/fetchLoginUser',
   async (user: ILoginUser) => {
     const response = await userLogin(user)
-    return response.data.user as IUser
+    return response.data.user
   },
 )
 
@@ -16,22 +16,12 @@ export const fetchRegisterUser = createAsyncThunk(
   'user/fetchRegisterUser',
   async (user: IRegisterUser) => {
     const response = await userRegister(user)
-    console.log(response)
-
-    return response.data.user as IUser
+    return response.data.user
   },
 )
 
-const user: IUser = {
-  email: null,
-  token: null,
-  username: null,
-  bio: null,
-  image: null,
-}
-
 const initialState: IUserState = {
-  user,
+  user: null,
   status: ResponseStatus.idle,
   error: null,
 }

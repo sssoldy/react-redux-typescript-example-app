@@ -9,6 +9,7 @@ import {
   selectProfileStatus,
 } from '../../features/profile/profileSlice'
 import { ResponseStatus } from '../../types/API'
+import { Loading, Error, Message } from '../statusHandlers/StatusHandlers'
 
 interface ProfileInfoProps {}
 
@@ -31,12 +32,10 @@ const ProfileInfo: React.FC<ProfileInfoProps> = () => {
     }
   }, [dispatch, username])
 
-  // TODO: Refactor it
-  if (status === ResponseStatus.loading)
-    return <div className="article-preview">Loading articles...</div>
-  if (status === ResponseStatus.failed)
-    return <div className="article-preview">Error: {error}</div>
-  if (!profile) return <div className="article-preview">Nothing found</div>
+  // TODO: replace with fallback
+  if (status === ResponseStatus.loading) return <Loading title="profile" />
+  if (status === ResponseStatus.failed) return <Error error={error} />
+  if (!profile) return <Message title="Profile not found" />
 
   return (
     <div className="user-info">

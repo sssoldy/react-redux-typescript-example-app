@@ -12,15 +12,15 @@ export interface IRegisterUser {
 }
 
 export interface IUser {
-  email: string | null
-  token: string | null
-  username: string | null
-  bio: string | null
-  image: string | null
+  email: string
+  token: string
+  username: string
+  bio: string
+  image: string
 }
 
 export interface IUserState {
-  user: IUser
+  user: IUser | null
   status: ResponseStatus
   error: ResponseError
 }

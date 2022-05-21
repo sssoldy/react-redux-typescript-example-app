@@ -3,6 +3,7 @@ import { ITags, TagVariant } from '../../types/tag'
 import TagList from './TagList'
 import { useAsync } from '../../hooks/useAsync'
 import { getTags } from '../../services/conduit'
+import { Loading, Error, Message } from '../statusHandlers/StatusHandlers'
 
 const TagsPopular: React.FC = () => {
   const { data, error, run, isLoading, isError } = useAsync<ITags>()
@@ -10,10 +11,9 @@ const TagsPopular: React.FC = () => {
     run(getTags())
   }, [run])
 
-  // // TODO: Refactor it
-  if (isLoading) return <div>Loading tags...</div>
-  if (isError) return <div>Error: {error}</div>
-  if (!data || !data.tags.length) return <div>Nothing found</div>
+  if (isLoading) return <Loading title="tags" />
+  if (isError) return <Error error={error} />
+  if (!data || !data.tags.length) return <Message title="Nothing found" />
 
   return (
     <React.Fragment>

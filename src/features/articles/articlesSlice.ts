@@ -3,15 +3,13 @@ import {
   createEntityAdapter,
   createSelector,
   createSlice,
-  PayloadAction,
 } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { IArticle, IArticlesState, IArticles } from '../../types/article'
+import { IArticle, IArticlesState } from '../../types/article'
 import { ResponseStatus } from '../../types/API'
 import { getArticles } from '../../services/conduit'
 import { IArticleFilter } from '../../types/filter'
 import { baseFilter } from '../../config/settings'
-import { selectProfile } from '../profile/profileSlice'
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticleList',
@@ -20,7 +18,7 @@ export const fetchArticles = createAsyncThunk(
       ...baseFilter,
       ...filter,
     })
-    return response.data as IArticles
+    return response.data
   },
 )
 
@@ -39,11 +37,7 @@ const initialState = articlesAdapter.getInitialState<IArticlesState>({
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
-  reducers: {
-    filterUpdated: (state, action: PayloadAction<IArticleFilter>) => {
-      state.filter = action.payload
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(fetchArticles.pending, (state, action) => {
@@ -65,8 +59,6 @@ const articlesSlice = createSlice({
   },
 })
 
-export const { filterUpdated } = articlesSlice.actions
-
 export const {
   selectAll: selectAllArticles,
   selectById: selectArticleById,
@@ -78,9 +70,6 @@ export const selectArticlesStatus = (state: RootState) => state.articles.status
 export const selectArticlesFilter = (state: RootState) => state.articles.filter
 export const selectArticlesCount = (state: RootState) =>
   state.articles.articlesCount
-// export const selectArticleByUsername = (state: RootState) => {
-//   const articles = selectAllArticles(state)
-// }
 
 export const selectArticleByUsername = createSelector(
   [selectAllArticles, (_, username: string) => username],

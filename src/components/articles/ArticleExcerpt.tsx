@@ -6,6 +6,7 @@ import { TagVariant } from '../../types/tag'
 import { formatDate } from '../../utils/misc'
 import TagList from '../tags/TagList'
 import { selectArticleById } from '../../features/articles/articlesSlice'
+import { Message } from '../statusHandlers/StatusHandlers'
 
 interface ArticleExcerptProps {
   articleId: EntityId
@@ -14,20 +15,18 @@ interface ArticleExcerptProps {
 const ArticleExcerpt: React.FC<ArticleExcerptProps> = ({ articleId }) => {
   const article = useAppSelector(state => selectArticleById(state, articleId))
 
-  // TODO: Add error handler
-  if (!article)
-    return <div className="article-preview">Something went wrong</div>
+  if (!article) return <Message title="Article not found" />
 
   const { author } = article
 
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <Link to={`@${author.username}`}>
+        <Link to={`/@${author.username}`}>
           <img src={author.image} alt={author.username} />
         </Link>
         <div className="info">
-          <Link to={`@${author.username}`} className="author">
+          <Link to={`/@${author.username}`} className="author">
             {author.username}
           </Link>
           <span className="date">{formatDate(article.createdAt)}</span>

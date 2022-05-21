@@ -7,25 +7,22 @@ import {
   selectArticlesIds,
   selectArticlesStatus,
 } from '../../features/articles/articlesSlice'
+import { Loading, Error, Message } from '../statusHandlers/StatusHandlers'
 
 const ArticlesList: React.FC = () => {
   const articlesIds = useAppSelector(selectArticlesIds)
-  // const articlesIds: Array<EntityId> = []
   const error = useAppSelector(selectArticlesError)
   const status = useAppSelector(selectArticlesStatus)
 
-  // TODO: Refactor it
-  if (status === ResponseStatus.loading)
-    return <div className="article-preview">Loading articles...</div>
-  if (status === ResponseStatus.failed)
-    return <div className="article-preview">Error: {error}</div>
-  if (!articlesIds.length)
-    return <div className="article-preview">Nothing found</div>
+  if (status === ResponseStatus.loading) return <Loading title="Articles" />
+  if (status === ResponseStatus.failed) return <Error error={error} />
+  if (!articlesIds.length) return <Message title="Nothing found" />
 
   return (
     <React.Fragment>
-      {articlesIds &&
-        articlesIds.map(id => <ArticleExcerpt key={id} articleId={id} />)}
+      {articlesIds.map(id => (
+        <ArticleExcerpt key={id} articleId={id} />
+      ))}
     </React.Fragment>
   )
 }
