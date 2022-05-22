@@ -3,6 +3,7 @@ import articlesReducer from '../features/articles/articlesSlice'
 import articleReducer from '../features/article/articleSlice'
 import profileReducer from '../features/profile/profileSlice'
 import userReducer from '../features/user/userSlice'
+import filterReducer from '../features/filter/filterSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     article: articleReducer,
     profile: profileReducer,
     user: userReducer,
+    filter: filterReducer,
   },
 })
 

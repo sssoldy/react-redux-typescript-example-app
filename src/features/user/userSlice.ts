@@ -1,8 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {
+  createAsyncThunk,
+  createSlice,
+  isFulfilled,
+  isPending,
+  isRejected,
+} from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { userLogin, userRegister } from '../../services/conduit'
+import { getUser, userLogin, userRegister } from '../../services/conduit'
 import { ResponseStatus } from '../../types/API'
-import { ILoginUser, IUserState, IRegisterUser } from '../../types/user'
+import { ILoginUser, IUserState, IRegisterUser, IUser } from '../../types/user'
 
 export const fetchLoginUser = createAsyncThunk(
   'user/fetchLoginUser',
@@ -20,8 +26,17 @@ export const fetchRegisterUser = createAsyncThunk(
   },
 )
 
+export const fetchCurrentUser = createAsyncThunk(
+  'user/fetchCurrentUser',
+  async (token: string) => {
+    const response = await getUser(token)
+    return response.data.user
+  },
+)
+
 const initialState: IUserState = {
   user: null,
+  isLoggedIn: false,
   status: ResponseStatus.idle,
   error: null,
 }
@@ -30,33 +45,36 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
+  // https://redux-toolkit.js.org/api/createAsyncThunk
+  // https://redux-toolkit.js.org/api/createAsyncThunk#type
+  // https://redux-toolkit.js.org/api/matching-utilities
   extraReducers(builder) {
     builder
-      .addCase(fetchLoginUser.pending, state => {
-        state.status = ResponseStatus.loading
-      })
-      .addCase(fetchLoginUser.fulfilled, (state, action) => {
-        state.user = action.payload
-        state.status = ResponseStatus.successed
-        state.error = null
-      })
-      .addCase(fetchLoginUser.rejected, (state, action) => {
-        state.status = ResponseStatus.failed
-        state.error = action.error.message ?? null
-      })
-      // FIXME: Research how to union extra reducers with the same logic
-      .addCase(fetchRegisterUser.pending, state => {
-        state.status = ResponseStatus.loading
-      })
-      .addCase(fetchRegisterUser.fulfilled, (state, action) => {
-        state.user = action.payload
-        state.status = ResponseStatus.successed
-        state.error = null
-      })
-      .addCase(fetchRegisterUser.rejected, (state, action) => {
-        state.status = ResponseStatus.failed
-        state.error = action.error.message ?? null
-      })
+      .addMatcher(
+        isPending(fetchLoginUser, fetchRegisterUser, fetchCurrentUser),
+        state => {
+          state.status = ResponseStatus.loading
+        },
+      )
+      .addMatcher(
+        isFulfilled(fetchLoginUser, fetchRegisterUser, fetchCurrentUser),
+        (state, action) => {
+          const user = action.payload as IUser
+          state.user = user
+          state.isLoggedIn = true
+          window.localStorage.setItem('jwt', user.token)
+          state.status = ResponseStatus.successed
+          state.error = null
+        },
+      )
+      .addMatcher(
+        isRejected(fetchLoginUser, fetchRegisterUser, fetchCurrentUser),
+        (state, action) => {
+          state.isLoggedIn = false
+          state.status = ResponseStatus.failed
+          state.error = action.error.message ?? null
+        },
+      )
   },
 })
 

@@ -6,6 +6,7 @@ import FilterItem from './FilterItem'
 
 const FilterTab: React.FC = () => {
   const filter = useAppSelector(selectArticlesFilter)
+  const isLoggedIn = useAppSelector(state => state.user.isLoggedIn)
 
   const isTag = 'tag' in filter
   const isAuthor = 'author' in filter
@@ -17,13 +18,21 @@ const FilterTab: React.FC = () => {
           <FilterItem filter={{ author: filter.author }}>
             {filter.author}`s Articles
           </FilterItem>
-          {/* FIXME: With Auth only */}
-          {/* <FilterItem filter={{ favorited: filter.favorited }}>
-            Favorited Articles
-          </FilterItem> */}
+          {isLoggedIn && (
+            <FilterItem filter={{ favorited: filter.favorited }}>
+              Favorited Articles
+            </FilterItem>
+          )}
         </React.Fragment>
       ) : (
-        <FilterItem filter={baseFilter}>Global Feed</FilterItem>
+        <React.Fragment>
+          {isLoggedIn && (
+            <FilterItem filter={{ favorited: filter.favorited }}>
+              Your Feed
+            </FilterItem>
+          )}
+          <FilterItem filter={baseFilter}>Global Feed</FilterItem>
+        </React.Fragment>
       )}
       {isTag && (
         <FilterItem filter={{ tag: filter.tag }}>#{filter.tag}</FilterItem>

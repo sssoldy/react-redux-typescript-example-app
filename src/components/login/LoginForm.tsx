@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import {
   fetchLoginUser,
@@ -11,6 +12,7 @@ import { ILoginUser } from '../../types/user'
 // TODO: add validation
 // TODO: add error handler
 const LoginForm: React.FC = () => {
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const status = useAppSelector(selectUserStatus)
@@ -33,6 +35,7 @@ const LoginForm: React.FC = () => {
   const onFormSubmitted = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     dispatch(fetchLoginUser(formData))
+    // navigate('/')
   }
 
   return (

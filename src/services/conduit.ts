@@ -2,7 +2,7 @@ import axios from 'axios'
 import { baseApiUrl } from '../config/settings'
 import { IArticle, IArticles } from '../types/article'
 import { IComments } from '../types/comment'
-import { IArticleFilter } from '../types/filter'
+import { IArticleFilter, IReqParams } from '../types/filter'
 import { IProfile } from '../types/profile'
 import { ITags } from '../types/tag'
 import { ILoginUser, IRegisterUser, IUser } from '../types/user'
@@ -18,6 +18,12 @@ export const userRegister = async (registerData: IRegisterUser) => {
   return await axios.post<{ user: IUser }>('users', { user: registerData })
 }
 
+export const getUser = async (token: string) => {
+  return await axios.get<{ user: IUser }>('user', {
+    headers: { authorization: `Token ${token}` },
+  })
+}
+
 // Profile
 export const getProfile = async (username: string) => {
   return await axios.get<{ profile: IProfile }>(`profiles/${username}`)
@@ -25,6 +31,9 @@ export const getProfile = async (username: string) => {
 
 // Articles
 export const getArticles = async (params: IArticleFilter = {}) => {
+  return await axios.get<IArticles>('articles', { params })
+}
+export const getArticlesNew = async (params: IReqParams = {}) => {
   return await axios.get<IArticles>('articles', { params })
 }
 

@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { useAppDispatch } from './app/hooks'
+import { fetchCurrentUser } from './features/user/userSlice'
 import Footer from './layouts/Footer'
 import Header from './layouts/Header'
 import Main from './layouts/Main'
@@ -9,6 +11,14 @@ import Login from './pages/Login'
 import Profile from './pages/Profile'
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch()
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('jwt')
+
+    if (token) dispatch(fetchCurrentUser(token))
+  }, [dispatch])
+
   return (
     <React.Fragment>
       <Header />

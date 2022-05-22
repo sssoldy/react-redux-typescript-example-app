@@ -3,10 +3,19 @@ import { NavLink } from 'react-router-dom'
 
 interface NavItemProps {
   to: string
-  children: React.ReactNode
+  icon?: string
+  title: string
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, children }) => {
+const NavItem: React.FC<NavItemProps> = ({ to, icon, title }) => {
+  const content = icon ? (
+    <React.Fragment>
+      <i className={icon}></i>&nbsp;{title}
+    </React.Fragment>
+  ) : (
+    title
+  )
+
   return (
     <li className="nav-item">
       <NavLink
@@ -14,7 +23,7 @@ const NavItem: React.FC<NavItemProps> = ({ to, children }) => {
           isActive ? 'active' : ''}`}
         to={to}
       >
-        {children}
+        {content}
       </NavLink>
     </li>
   )

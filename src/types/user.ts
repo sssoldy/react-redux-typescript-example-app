@@ -21,6 +21,7 @@ export interface IUser {
 
 export interface IUserState {
   user: IUser | null
+  isLoggedIn: boolean
   status: ResponseStatus
   error: ResponseError
 }
