@@ -1,33 +1,46 @@
 import * as React from 'react'
 import { useAppSelector } from '../../app/hooks'
 import { baseFilter } from '../../config/settings'
-import {
-  fetchArticles,
-  selectArticlesFilter,
-} from '../../features/articles/articlesSlice'
+import { fetchArticles } from '../../features/articles/articlesSlice'
 import { selectProfile } from '../../features/profile/profileSlice'
+import { selectUser } from '../../features/user/userSlice'
+import { IProfile } from '../../types/profile'
+import { IUser } from '../../types/user'
+import { Error } from '../statusHandlers/StatusHandlers'
 import FilterItem from './FilterItem'
 
-interface ProfileTabProps {}
-
-const ProfileTab: React.FC<ProfileTabProps> = () => {
-  const filter = useAppSelector(selectArticlesFilter)
+const ProfileTab: React.FC = () => {
   const profile = useAppSelector(selectProfile)
+  const user = useAppSelector(selectUser)
 
-  // TODO: add profile/user variations
+  let curUsername: IUser | IProfile
+
+  if (!user && profile) {
+    curUsername = profile
+  } else if (user && profile) {
+    const isUser = profile.username === user.username
+    curUsername = isUser ? user : profile
+  } else {
+    return <Error error="Profile page check nulls" />
+  }
+
   const profileTab = (
     <FilterItem
-      filter={{ ...baseFilter, author: filter.author }}
-      onClick={() => fetchArticles({ ...baseFilter, author: filter.author })}
+      filter={{ ...baseFilter, author: curUsername.username }}
+      onClick={() =>
+        fetchArticles({ ...baseFilter, author: curUsername.username })
+      }
     >
-      {profile && profile.username}`s Articles
+      {curUsername.username}`s Articles
     </FilterItem>
   )
 
   const favoriteTab = (
     <FilterItem
-      filter={{ ...baseFilter, favorited: filter.author }}
-      onClick={() => fetchArticles({ ...baseFilter, favorited: filter.author })}
+      filter={{ ...baseFilter, favorited: curUsername.username }}
+      onClick={() =>
+        fetchArticles({ ...baseFilter, favorited: curUsername.username })
+      }
     >
       Favorited Articles
     </FilterItem>

@@ -4,19 +4,19 @@ import { IArticleFilter } from '../types/filter'
 
 export const useRouteFilter = () => {
   const { pathname, hash } = useLocation()
-
   let filter: IArticleFilter = baseFilter
+
   if (pathname === '/' && hash !== '') {
     const tag = hash.substring(1)
-    filter = { ...filter, tag: tag }
+    return { ...filter, tag: tag }
   }
 
   if (pathname === '/' && hash === '') {
-    filter = { ...filter }
+    return { ...filter }
   }
 
-  if (pathname.includes('/@') && hash === '') {
-    const username = pathname.substring(pathname.lastIndexOf('@') + 1)
+  if (pathname.includes('/@')) {
+    const username = pathname.substring(2)
     filter = { ...filter, author: username }
   }
 

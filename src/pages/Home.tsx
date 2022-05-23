@@ -1,18 +1,23 @@
 import * as React from 'react'
-import { useAppDispatch } from '../app/hooks'
+import { useAppDispatch, useAppSelector } from '../app/hooks'
 import ArticleList from '../components/articles/ArticleList'
 import GlobalTab from '../components/filterTab/GlobalTab'
 import TagsPopular from '../components/tags/TagsPopular'
-import { fetchArticles } from '../features/articles/articlesSlice'
+import {
+  fetchArticles,
+  fetchUserArticles,
+} from '../features/articles/articlesSlice'
+import { selectUser } from '../features/user/userSlice'
 import { useRouteFilter } from '../hooks/useRouteFilter'
 
 const Home: React.FC = () => {
   const filter = useRouteFilter()
   const dispatch = useAppDispatch()
+  const user = useAppSelector(selectUser)
 
   React.useEffect(() => {
-    dispatch(fetchArticles(filter))
-  }, [dispatch, filter])
+    user ? dispatch(fetchUserArticles(filter)) : dispatch(fetchArticles(filter))
+  }, [dispatch, filter, user])
 
   return (
     <div className="home-page">

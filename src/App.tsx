@@ -25,11 +25,8 @@ const App: React.FC = () => {
       <Main>
         <Routes>
           <Route index element={<Home />} />{' '}
-          {/* USER LOGED IN for global tab */}
-          {/* <Route path='/feed' element={<Home />} /> */}
           <Route path=":slug" element={<Article />} />
-          <Route path="@:username" element={<Profile />} /> {/* FAVORITED */}
-          {/* <Route path="@:username/favorited" element={<Profile />} /> */}
+          <Route path="@:username" element={<Profile />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Login />} />
           <Route

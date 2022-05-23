@@ -20,7 +20,6 @@ const FilterItem: React.FC<FilterItemProps> = ({
 
   const stateFilter = useAppSelector(selectArticlesFilter)
   const isActive = isFiltersEqual(stateFilter, filter)
-  console.log(stateFilter, filter)
 
   const onTabClicked = () => {
     dispatch(onClick())
@@ -30,8 +29,8 @@ const FilterItem: React.FC<FilterItemProps> = ({
     <li className="nav-item">
       <span
         style={{ cursor: 'pointer' }}
-        className={`nav-link`}
-        // className={`nav-link ${isActive ? 'active' : ''}`}
+        // className={`nav-link`}
+        className={`nav-link ${isActive ? 'active' : ''}`}
         onClick={onTabClicked}
       >
         {children}
