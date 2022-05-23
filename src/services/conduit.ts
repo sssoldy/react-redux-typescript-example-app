@@ -30,15 +30,22 @@ export const getProfile = async (username: string) => {
 }
 
 // Articles
-export const getArticles = async (params: IArticleFilter = {}) => {
-  return await axios.get<IArticles>('articles', { params })
-}
-export const getArticlesNew = async (params: IReqParams = {}) => {
+export const getArticles = async (params: IArticleFilter) => {
   return await axios.get<IArticles>('articles', { params })
 }
 
 export const getArticleBySlug = async (slug: string) => {
   return await axios.get<{ article: IArticle }>(`articles/${slug}`)
+}
+
+export const getUserArticles = async (
+  token: string,
+  params: IArticleFilter,
+) => {
+  return await axios.get<IArticles>('articles/feed', {
+    headers: { authorization: `Token ${token}` },
+    params,
+  })
 }
 
 // Comments

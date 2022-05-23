@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useAppDispatch } from '../app/hooks'
 import ArticlesList from '../components/articles/ArticleList'
-import FilterTab from '../components/filterTab/FilterTab'
+import ProfileTab from '../components/filterTab/ProfileTab'
 import ProfileInfo from '../components/profile/ProfileInfo'
 import { fetchArticles } from '../features/articles/articlesSlice'
 import { useRouteFilter } from '../hooks/useRouteFilter'
@@ -22,7 +22,7 @@ const Profile: React.FC = () => {
         <div className="row">
           <div className="col-xs-12 col-md-10 offset-md-1">
             <div className="articles-toggle">
-              <FilterTab />
+              <ProfileTab />
             </div>
             <ArticlesList />
           </div>

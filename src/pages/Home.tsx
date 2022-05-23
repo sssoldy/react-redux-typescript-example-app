@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useAppDispatch } from '../app/hooks'
 import ArticleList from '../components/articles/ArticleList'
-import FilterTab from '../components/filterTab/FilterTab'
+import GlobalTab from '../components/filterTab/GlobalTab'
 import TagsPopular from '../components/tags/TagsPopular'
 import { fetchArticles } from '../features/articles/articlesSlice'
 import { useRouteFilter } from '../hooks/useRouteFilter'
@@ -27,7 +27,7 @@ const Home: React.FC = () => {
         <div className="row">
           <div className="col-md-9">
             <div className="feed-toggle">
-              <FilterTab />
+              <GlobalTab />
             </div>
             <ArticleList />
           </div>

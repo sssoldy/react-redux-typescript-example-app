@@ -3,21 +3,35 @@ import {
   createEntityAdapter,
   createSelector,
   createSlice,
+  isFulfilled,
+  isPending,
+  isRejected,
 } from '@reduxjs/toolkit'
 import { RootState } from '../../app/store'
-import { IArticle, IArticlesState } from '../../types/article'
+import { IArticle, IArticles, IArticlesState } from '../../types/article'
 import { ResponseStatus } from '../../types/API'
-import { getArticles } from '../../services/conduit'
+import { getArticles, getUserArticles } from '../../services/conduit'
 import { IArticleFilter } from '../../types/filter'
 import { baseFilter } from '../../config/settings'
 
 export const fetchArticles = createAsyncThunk(
   'articles/fetchArticleList',
   async (filter: IArticleFilter) => {
-    const response = await getArticles({
-      ...baseFilter,
-      ...filter,
-    })
+    const response = await getArticles(filter)
+    return response.data
+  },
+)
+
+export const fetchUserArticles = createAsyncThunk<
+  IArticles,
+  IArticleFilter,
+  { state: RootState }
+>(
+  'articles/fetchUserArticleList',
+  async (filter: IArticleFilter, { getState }) => {
+    const state = getState()
+    const token = state.user.user?.token as string
+    const response = await getUserArticles(token, filter)
     return response.data
   },
 )
@@ -40,22 +54,31 @@ const articlesSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(fetchArticles.pending, (state, action) => {
-        state.status = ResponseStatus.loading
-        state.filter = action.meta.arg
-      })
+      .addMatcher(
+        isPending(fetchArticles, fetchUserArticles),
+        (state, action) => {
+          state.status = ResponseStatus.loading
+          state.filter = action.meta.arg
+        },
+      )
       // FIXME: replace setAll for pagination feature
-      .addCase(fetchArticles.fulfilled, (state, action) => {
-        const { articles, articlesCount } = action.payload
-        articlesAdapter.setAll(state, articles)
-        state.articlesCount = articlesCount
-        state.status = ResponseStatus.successed
-        state.error = null
-      })
-      .addCase(fetchArticles.rejected, (state, action) => {
-        state.status = ResponseStatus.failed
-        state.error = action.error.message ?? null
-      })
+      .addMatcher(
+        isFulfilled(fetchArticles, fetchUserArticles),
+        (state, action) => {
+          const { articles, articlesCount } = action.payload
+          articlesAdapter.setAll(state, articles)
+          state.articlesCount = articlesCount
+          state.status = ResponseStatus.successed
+          state.error = null
+        },
+      )
+      .addMatcher(
+        isRejected(fetchArticles, fetchUserArticles),
+        (state, action) => {
+          state.status = ResponseStatus.failed
+          state.error = action.error.message ?? null
+        },
+      )
   },
 })
 
